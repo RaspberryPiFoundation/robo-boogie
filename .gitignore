@@ -3,3 +3,7 @@
 node_modules/**/*
 dev/_database/**/*
 dev/assets/music/
+
+# Ruby
+.bundle/
+vendor/bundle/
