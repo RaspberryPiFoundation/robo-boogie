@@ -3,7 +3,14 @@
 node_modules/**/*
 dev/_database/**/*
 dev/assets/music/
+tmp/*
 
 # Ruby
 .bundle/
 vendor/bundle/
+
+# Legacy database dumps (they contain owner UUIDs) and import reports
+*.sql
+*.sql.gz
+!test/fixtures/*.sql
+legacy-import-report*.json

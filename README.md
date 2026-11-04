@@ -14,6 +14,7 @@ We learned a lot building the app so we've put the code up here in the hopes it 
 - `lib/robo_boogie/legacy_format.rb` defines the JSON shapes the frontend expects.
 - `db/migrate/` holds the database schema as [Sequel](https://sequel.jeremyevans.net) migrations.
 - `test/` holds the tests.
+- `tools/legacy_import/` copies dances from the old PHP app's MySQL database. It's only needed until the move off the old server is finished; see its README.
 
 ## Running locally
 
