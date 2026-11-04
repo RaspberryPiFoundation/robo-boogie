@@ -17,7 +17,7 @@ We learned a lot building the app so we've put the code up here in the hopes it 
 
 ## Running locally
 
-You'll need the Ruby version in `.ruby-version` and a local Postgres.
+You'll need a local Postgres and the Ruby version named in `.ruby-version`. `.tool-versions` declares the same version for [asdf](https://asdf-vm.com), so change both when upgrading Ruby.
 
     bundle install
     createdb roboboogie_dev
