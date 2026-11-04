@@ -15,6 +15,13 @@ class StaticTest < ApiTestCase
     assert_nil last_response.headers["x-frame-options"], "#iframe/ embeds on other sites must keep working"
   end
 
+  def test_no_server_side_source_is_served
+    ["/api/index.php", "/api/application/config/database.php"].each do |path|
+      get path
+      assert_equal 404, last_response.status, path
+    end
+  end
+
   def test_assets_are_served_with_a_day_of_caching
     get "/assets/data/robots.json"
 

@@ -10,7 +10,7 @@ module RoboBoogie
   # Serves the static Backbone frontend from build/ and the small JSON API it
   # talks to. The API keeps the old CodeIgniter paths (/api/index.php/...) and
   # response shapes, so the frontend and every shared #watch/ and #iframe/ link
-  # keep working unchanged. See docs/heroku-migration.md.
+  # keep working unchanged. See "The API" in README.md.
   class App < Sinatra::Base
     BUILD_DIR = File.expand_path("build", __dir__)
 

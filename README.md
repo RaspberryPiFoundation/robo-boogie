@@ -6,67 +6,61 @@ You can check the app out online at [roboboogie.codeclub.org.uk](https://roboboo
 
 We learned a lot building the app so we've put the code up here in the hopes it might interesting/helpful to somebody!
 
-## Getting up and running
+## How it fits together
 
-There are a couple of things you'll need installed to begin:
+- `build/` is the frontend, a Backbone app. It's already built and committed, and is served as-is.
+- `dev/` is the frontend's source: JavaScript, templates and Sass. It isn't served.
+- `app.rb` is a small [Sinatra](https://sinatrarb.com) app. It serves `build/`, plus the JSON API that saves dances in Postgres.
+- `lib/robo_boogie/legacy_format.rb` defines the JSON shapes the frontend expects.
+- `db/migrate/` holds the database schema as [Sequel](https://sequel.jeremyevans.net) migrations.
+- `test/` holds the tests.
 
-1. Node and NPM installed (a good guide is available [on Shape Shed](http://shapeshed.com/setting-up-nodejs-and-npm-on-mac-osx/))
-2. A PHP/MySQL server to run the API
+## Running locally
+
+You'll need the Ruby version in `.ruby-version` and a local Postgres.
+
+    bundle install
+    createdb roboboogie_dev
+    DATABASE_URL=postgres:///roboboogie_dev bundle exec rake db:migrate
+    DATABASE_URL=postgres:///roboboogie_dev bundle exec puma -C config/puma.rb
+
+The app is then at http://localhost:9292.
+
+The tests need their own database, because they empty it on every run:
+
+    createdb roboboogie_test
+    TEST_DATABASE_URL=postgres:///roboboogie_test bundle exec rake test
+
+## The API
+
+Shared links such as `/#watch/<guid>`, `/#iframe/<guid>` and `/#dance/<guid>` are frontend routes; the frontend then loads the dance from the API. The API keeps the paths and response shapes of the app's original PHP API, so the frontend and existing links work unchanged.
+
+| Request | Used for | Response |
+|---|---|---|
+| `GET /api/index.php/users/user/<uuid>?uuid=<uuid>` | Every page load | `{"uuid": …, "dances": [{"guid", "robot_id", "robot_name"}]}` |
+| `PUT /api/index.php/users/user/<uuid>` | A browser's first visit | Same as above |
+| `GET /api/index.php/dances/dance/<guid>` | Watching or editing a dance | `[{…dance}]`, or `{"danceFound": false}` |
+| `POST` or `PUT /api/index.php/dances/dance/[<guid>]` | Saving a dance | The dance's guid, as a JSON string |
+
+There are no accounts. Each browser makes up a random UUID and keeps it in `localStorage`, and a dance belongs to the UUID that saved it. Only that UUID, sent in the request body, can update the dance.
+
+The users endpoint also sets an `rb_owner` cookie. A dance's `uuid` field is only filled in when that cookie matches the owner. The frontend compares it with its own UUID to decide whether to offer "Edit dance", so the owner's UUID never reaches anyone else.
+
+## Changing the frontend
+
+The Grunt build that turned `dev/` into `build/` no longer runs on current tooling, so it has been removed (`git log -- gruntfile.js` finds it). `build/assets/js/roboboogie.min.js` isn't actually minified, so small fixes can go straight into it. When you do:
+
+- make the same change in `dev/`, so the source stays in step
+- bump the `?…` version on `roboboogie.min.js` in `build/index.html`, because static files are cached for a day
+
+### Robots and sounds
+
+- Robots are defined in `build/assets/data/robots.json`. The API accepts any robot `id` listed there.
+- Sound loops live in `build/assets/music/loops/` and are listed in `build/assets/data/soundtracks.json`. The API maps each `sound_id` to a loop in `LegacyFormat::SOUNDTRACK_FILES`, so a new sound needs adding there too.
 
 ## Deploying
 
-After running `grunt build` (see below) and committing/pushing the changes:
-
-```
-cap production deploy
-```
-
-## The App
-
-The app is divided into two parts: A frontend Backbone JS app and a Codeigniter PHP API for saving the dances.
-
-### Frontend
-
-The front end relies on grunt, both to run the development server and the build task. To install the necessary packages run
-
-    npm install
-
-…from the root folder.
-
-The `dev` folder contains the projects files and API files. To run the front end of the app, start the express server using:
-
-    grunt server
-
-The app should now be available at `http://0.0.0.0:8000/` in your web browser.
-
-The dev folder can then be complied and minified into to the `/build/` folder using the grunt task:
-
-    grunt build
-
-Details of what happens during this task can be found in `Gruntfile.js`.
-
-### Sound
-
-Sound files can be placed into:
-
-    /dev/assets/music/loops/
-
-Then added to the JSON file
-
-    /dev/assets/data/soundtracks.json
-
-### Backend API
-
-Firstly you'll need to set up a local testing domain (e.g. http://codeclub.dev) and point it to `/dev/api/`. We use [VirtualhostX](https://clickontyler.com/virtualhostx/) for this kind of thing and can heartily recommend it.
-
-The MySQL database schema is in `schema.sql` in the project root. You should run this in your favourite MySQL GUI (we use [Sequel Pro](http://www.sequelpro.com/)) and then update your database connection settings in:
-
-    /dev/api/application/config/database.php
-
-Also you'll need to ensure your API url is correctly entered in:
-
-    /dev/assets/js/config/urlConfig.js
-
+The app is set up for Heroku with Heroku Postgres. On each deploy, the `Procfile` runs database migrations in Heroku's release phase and then starts Puma.
 
 ## Thanks
 
@@ -78,6 +72,3 @@ Also you'll need to ensure your API url is correctly entered in:
 - Tom Judd, for animation advice and tips
 
 Also you should check out the accompanying promo animation by our sister company [Animade](http://animade.tv) over on [Code Club's Youtube Channel](http://www.youtube.com/watch?v=sGtaIJTPbWU).
-
-
-
