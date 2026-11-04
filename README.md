@@ -63,6 +63,12 @@ The Grunt build that turned `dev/` into `build/` no longer runs on current tooli
 
 The app is set up for Heroku with Heroku Postgres. On each deploy, the `Procfile` runs database migrations in Heroku's release phase and then starts Puma.
 
+GitHub Actions runs the tests on every pull request and every push to `main` (`.github/workflows/ci.yml`). In the Heroku app's GitHub integration, turn on automatic deploys from `main` with "Wait for CI to pass before deploy", so only tested commits go live.
+
+## Keeping it up to date
+
+Dependabot opens weekly pull requests to update gems and GitHub Actions. It waits a week after each release, except for security fixes.
+
 ## Thanks
 
 - Clare Sutcliffe, for asking us to do this!
