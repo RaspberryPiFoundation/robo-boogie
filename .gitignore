@@ -3,3 +3,14 @@
 node_modules/**/*
 dev/_database/**/*
 dev/assets/music/
+tmp/*
+
+# Ruby
+.bundle/
+vendor/bundle/
+
+# Database dumps, including Heroku's pg:backups downloads (they contain owner UUIDs)
+*.sql
+*.sql.gz
+*.tar.gz
+*.dump

@@ -20,7 +20,7 @@ define(["backbone",
 
             } else {
 
-                this.set('url', 'https://' + window.location.host);
+                this.set('url', window.location.protocol + '//' + window.location.host);
                 this.set('env', 'production');
 
             }
