@@ -9,8 +9,8 @@ tmp/*
 .bundle/
 vendor/bundle/
 
-# Legacy database dumps (they contain owner UUIDs) and import reports
+# Database dumps, including Heroku's pg:backups downloads (they contain owner UUIDs)
 *.sql
 *.sql.gz
-!test/fixtures/*.sql
-legacy-import-report*.json
+*.tar.gz
+*.dump

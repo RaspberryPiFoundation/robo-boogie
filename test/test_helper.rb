@@ -43,7 +43,7 @@ class ApiTestCase < Minitest::Test
     send(verb, path, JSON.generate(body), { "CONTENT_TYPE" => "application/json" }.merge(env))
   end
 
-  # A row as the legacy import writes it: move is the JSON text the PHP API stored.
+  # A dance as imported from the PHP app: move is the JSON text the PHP API stored.
   def insert_dance(**attrs)
     legacy_move = JSON.generate(LEGACY_RESPONSE.slice(*RoboBoogie::LegacyFormat::MOVE_KEYS))
     RoboBoogie.db[:dances].insert(
