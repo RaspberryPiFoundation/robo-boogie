@@ -17,3 +17,11 @@ updates:
       interval: weekly
     cooldown:
       default-days: 7
+
+  # The frontend build (dev/package.json)
+  - package-ecosystem: npm
+    directory: /dev
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7

@@ -48,10 +48,21 @@ The users endpoint also sets an `rb_owner` cookie. A dance's `uuid` field is onl
 
 ## Changing the frontend
 
-The Grunt build that turned `dev/` into `build/` no longer runs on current tooling, so it has been removed (`git log -- gruntfile.js` finds it). `build/assets/js/roboboogie.min.js` isn't actually minified, so small fixes can go straight into it. When you do:
+`dev/` is the frontend's source and `build/` is what gets served. Both are committed.
 
-- make the same change in `dev/`, so the source stays in step
-- bump the `?…` version on `roboboogie.min.js` in `build/index.html`, because static files are cached for a day
+The JavaScript and its templates, in `dev/assets/js/`, are bundled into `build/assets/js/roboboogie.min.js` with [r.js](https://requirejs.org/docs/optimization.html). You'll need the Node version named in `.tool-versions`. After changing anything in `dev/assets/js/`:
+
+    cd dev
+    npm ci
+    npm run build
+
+This rebuilds the bundle and updates its `?…` version in `build/index.html`, so browsers fetch the new bundle instead of a copy cached for up to a day. Commit the changes in `dev/` and `build/` together.
+
+The build doesn't cover anything else yet, so other changes need making in both places:
+
+- `index.html`: change both `dev/index.html` and `build/index.html`. They differ only in how they load the scripts and in the `?…` versions.
+- Styles: the Sass in `dev/assets/sass/` isn't compiled by the build. Today's Dart Sass writes some colours and rules differently from the Ruby Sass that produced `build/assets/css/main.css` in 2015, so switching to it would need the whole site checked by eye. For now, make a small style fix in both `dev/assets/sass/` and `build/assets/css/main.css`, and bump the `?…` version on `main.css` in `build/index.html`.
+- Images, fonts and data: copy them into `build/assets/`.
 
 ### Robots and sounds
 
@@ -66,7 +77,7 @@ GitHub Actions runs the tests on every pull request and every push to `main` (`.
 
 ## Keeping it up to date
 
-Dependabot opens weekly pull requests to update gems and GitHub Actions. It waits a week after each release, except for security fixes.
+Dependabot opens weekly pull requests to update gems, GitHub Actions and the frontend's build tool. It waits a week after each release, except for security fixes.
 
 ## Thanks
 

@@ -1,0 +1,14 @@
+{
+  "name": "roboboogie-frontend",
+  "private": true,
+  "description": "Builds the Robo-Boogie frontend from dev/ into build/. See the README.",
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "devDependencies": {
+    "requirejs": "2.3.8"
+  }
+}
