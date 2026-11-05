@@ -10,5 +10,8 @@
   },
   "devDependencies": {
     "requirejs": "2.3.8"
+  },
+  "dependencies": {
+    "sass": "1.106.1"
   }
 }

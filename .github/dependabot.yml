@@ -25,3 +25,7 @@ updates:
       interval: weekly
     cooldown:
       default-days: 7
+    ignore:
+      # Sass 2 and 3 drop features our 2013 Sass uses (see the README)
+      - dependency-name: sass
+        update-types: ["version-update:semver-major"]

@@ -1,8 +1,6 @@
 .DS_Store
-.sass-cache/**/*
 node_modules/
 dev/_database/**/*
-dev/assets/music/
 tmp/*
 
 # Ruby
@@ -14,3 +12,6 @@ vendor/bundle/
 *.sql.gz
 *.tar.gz
 *.dump
+
+# Left behind if the frontend build is interrupted
+/.build-tmp/

@@ -1,6 +1,6 @@
 ![Robo-Boogie](https://roboboogie.codeclub.org.uk/assets/img/logo%401x.png)
 
-Robo-boogie is a web-based robot dancing game made for [Code Club](https://www.codeclub.org.uk) by [Hover Studio](http://hoverstud.io).
+Robo-boogie is a web-based robot dancing game made for [Code Club](https://www.codeclub.org.uk) by Hover Studio.
 
 You can check the app out online at [roboboogie.codeclub.org.uk](https://roboboogie.codeclub.org.uk)
 
@@ -8,8 +8,8 @@ We learned a lot building the app so we've put the code up here in the hopes it 
 
 ## How it fits together
 
-- `build/` is the frontend, a Backbone app. It's already built and committed, and is served as-is.
-- `dev/` is the frontend's source: JavaScript, templates and Sass. It isn't served.
+- `dev/` is the frontend's source, a Backbone app: JavaScript, templates, Sass, images, sounds and data. It isn't served.
+- `build/` is the built frontend, made from `dev/` by `npm run build`. It's committed and served as-is.
 - `app.rb` is a small [Sinatra](https://sinatrarb.com) app. It serves `build/`, plus the JSON API that saves dances in Postgres.
 - `lib/robo_boogie/legacy_format.rb` defines the JSON shapes the frontend expects.
 - `db/migrate/` holds the database schema as [Sequel](https://sequel.jeremyevans.net) migrations.
@@ -48,26 +48,27 @@ The users endpoint also sets an `rb_owner` cookie. A dance's `uuid` field is onl
 
 ## Changing the frontend
 
-`dev/` is the frontend's source and `build/` is what gets served. Both are committed.
-
-The JavaScript and its templates, in `dev/assets/js/`, are bundled into `build/assets/js/roboboogie.min.js` with [r.js](https://requirejs.org/docs/optimization.html). You'll need the Node version named in `.tool-versions`. After changing anything in `dev/assets/js/`:
+Make every change in `dev/`, then rebuild `build/` from it. Don't edit `build/` by hand: each build replaces the whole folder. You'll need the Node version named in `.tool-versions`.
 
     cd dev
     npm ci
     npm run build
 
-This rebuilds the bundle and updates its `?…` version in `build/index.html`, so browsers fetch the new bundle instead of a copy cached for up to a day. Commit the changes in `dev/` and `build/` together.
+Then commit the changes in `dev/` and `build/` together. The build (`dev/build.mjs`):
 
-The build doesn't cover anything else yet, so other changes need making in both places:
+- bundles the JavaScript and templates in `dev/assets/js/` into `roboboogie.min.js` with [r.js](https://requirejs.org/docs/optimization.html)
+- compiles the Sass in `dev/assets/sass/` into `main.css` with [Dart Sass](https://sass-lang.com/dart-sass/)
+- makes `index.html` from `dev/index.html`, giving each CSS and JavaScript file a `?…` version taken from its contents, so browsers only fetch a file again when it changes (static files are cached for a day)
+- copies the images, fonts, sounds and data
 
-- `index.html`: change both `dev/index.html` and `build/index.html`. They differ only in how they load the scripts and in the `?…` versions.
-- Styles: the Sass in `dev/assets/sass/` isn't compiled by the build. Today's Dart Sass writes some colours and rules differently from the Ruby Sass that produced `build/assets/css/main.css` in 2015, so switching to it would need the whole site checked by eye. For now, make a small style fix in both `dev/assets/sass/` and `build/assets/css/main.css`, and bump the `?…` version on `main.css` in `build/index.html`.
-- Images, fonts and data: copy them into `build/assets/`.
+Images are copied as they are, so optimise a new image (for example with [ImageOptim](https://imageoptim.com)) before adding it to `dev/assets/img/`.
+
+The Sass dates from 2013 and uses features that Dart Sass has deprecated, such as `@import`, `darken()` and `/` for division. The build hides those warnings. Sass 1.x still supports them, but `/` for division goes in Sass 2 and `@import` in Sass 3, so they'll need replacing before either upgrade. Until then, Dependabot doesn't propose new major versions of Sass.
 
 ### Robots and sounds
 
-- Robots are defined in `build/assets/data/robots.json`. The API accepts any robot `id` listed there.
-- Sound loops live in `build/assets/music/loops/` and are listed in `build/assets/data/soundtracks.json`. The API maps each `sound_id` to a loop in `LegacyFormat::SOUNDTRACK_FILES`, so a new sound needs adding there too.
+- Robots are defined in `dev/assets/data/robots.json`. The API accepts any robot `id` listed in the built copy of that file.
+- Sound loops live in `dev/assets/music/loops/` and are listed in `dev/assets/data/soundtracks.json`. The API maps each `sound_id` to a loop in `LegacyFormat::SOUNDTRACK_FILES`, so a new sound needs adding there too.
 
 ## Deploying
 
