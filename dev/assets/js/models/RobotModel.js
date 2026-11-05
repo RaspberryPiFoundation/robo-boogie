@@ -1,8 +1,7 @@
 define(["backbone",
-    "config/urlConfig",
     "jquery",
     "underscore"
-  ], function(Backbone, UrlConfig, $, _) {
+  ], function(Backbone, $, _) {
     "use strict";
 
     /**
@@ -13,13 +12,6 @@ define(["backbone",
     
     var RobotModel  = Backbone.Model.extend({
         idAttribute: "id",
-        url: function () {
-             
-            var urlConfig   = new UrlConfig();
-
-            return urlConfig.get('url') + '/api/index.php/robots/robot';
-
-        },
         defaults: {
             "name": '',
             'sound_id': 1

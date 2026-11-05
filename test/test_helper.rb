@@ -64,6 +64,6 @@ class ApiTestCase < Minitest::Test
 
   # What the frontend does on every page load; this sets the owner cookie.
   def visit_as(uuid)
-    get "/api/index.php/users/user/#{uuid}", uuid: uuid
+    get "/api/users/#{uuid}", uuid: uuid
   end
 end

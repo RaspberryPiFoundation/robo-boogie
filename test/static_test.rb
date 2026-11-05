@@ -22,6 +22,13 @@ class StaticTest < ApiTestCase
     end
   end
 
+  def test_the_old_php_api_paths_are_gone
+    ["/api/index.php/dances/dance/#{LEGACY_GUID}", "/api/index.php/users/user/#{OWNER}"].each do |path|
+      get path
+      assert_equal 404, last_response.status, path
+    end
+  end
+
   def test_assets_are_served_with_a_day_of_caching
     get "/assets/data/robots.json"
 

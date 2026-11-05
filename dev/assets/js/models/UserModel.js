@@ -17,11 +17,11 @@ define(["backbone",
 
             if (this.isNew()){
 
-                return urlConfig.get('url') + "/api/index.php/users/user/";
+                return urlConfig.get('url') + "/api/users";
 
             } else {
 
-                return urlConfig.get('url') + "/api/index.php/users/user/" + this.id;
+                return urlConfig.get('url') + "/api/users/" + this.id;
 
             }
 

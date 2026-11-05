@@ -18,7 +18,7 @@ class ForceHTTPSTest < Minitest::Test
   end
 
   def test_rejects_plain_http_writes
-    put "http://roboboogie.example/api/index.php/dances/dance/abc"
+    put "http://roboboogie.example/api/dances/abc"
     assert_equal 403, last_response.status
   end
 

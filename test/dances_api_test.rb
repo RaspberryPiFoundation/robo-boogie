@@ -3,7 +3,7 @@
 require "test_helper"
 
 class DancesApiTest < ApiTestCase
-  DANCE_URL = "/api/index.php/dances/dance"
+  DANCE_URL = "/api/dances"
   PRESET = JSON.parse(File.read(File.expand_path("../build/assets/data/presets.json", __dir__))).first
 
   # A save as Backbone sends it: one of the frontend's presets (numbers and
@@ -83,7 +83,7 @@ class DancesApiTest < ApiTestCase
   end
 
   def test_creating_a_dance_returns_its_new_guid_and_stores_legacy_strings
-    send_json :post, "#{DANCE_URL}/", backbone_body
+    send_json :post, DANCE_URL, backbone_body
 
     assert_equal 200, last_response.status
     guid = json_response

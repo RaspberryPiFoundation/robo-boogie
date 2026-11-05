@@ -8,14 +8,14 @@ require_relative "lib/robo_boogie/legacy_format"
 
 module RoboBoogie
   # Serves the static Backbone frontend from build/ and the small JSON API it
-  # talks to. The API keeps the old CodeIgniter paths (/api/index.php/...) and
-  # response shapes, so the frontend and every shared #watch/ and #iframe/ link
-  # keep working unchanged. See "The API" in README.md.
+  # talks to. The API keeps the response shapes of the app's original PHP API,
+  # so the frontend and every shared #watch/ and #iframe/ link keep working.
+  # See "The API" in README.md.
   class App < Sinatra::Base
     BUILD_DIR = File.expand_path("build", __dir__)
 
-    DANCE_PATH = %r{/api/index\.php/dances/dance(?:/([^/]*))?/?}
-    USER_PATH = %r{/api/index\.php/users/user(?:/([^/]*))?/?}
+    DANCE_PATH = %r{/api/dances(?:/([^/]*))?/?}
+    USER_PATH = %r{/api/users(?:/([^/]*))?/?}
 
     # A "user" is a random UUID the frontend keeps in localStorage. The users
     # endpoint (called on every page load) stores it in this cookie, so dance

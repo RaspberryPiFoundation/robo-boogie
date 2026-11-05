@@ -33,14 +33,15 @@ The tests need their own database, because they empty it on every run:
 
 ## The API
 
-Shared links such as `/#watch/<guid>`, `/#iframe/<guid>` and `/#dance/<guid>` are frontend routes; the frontend then loads the dance from the API. The API keeps the paths and response shapes of the app's original PHP API, so the frontend and existing links work unchanged.
+Shared links such as `/#watch/<guid>`, `/#iframe/<guid>` and `/#dance/<guid>` are frontend routes; the frontend then loads the dance from the API. The API keeps the response shapes of the app's original PHP API, so the frontend and existing links work unchanged.
 
 | Request | Used for | Response |
 |---|---|---|
-| `GET /api/index.php/users/user/<uuid>?uuid=<uuid>` | Every page load | `{"uuid": …, "dances": [{"guid", "robot_id", "robot_name"}]}` |
-| `PUT /api/index.php/users/user/<uuid>` | A browser's first visit | Same as above |
-| `GET /api/index.php/dances/dance/<guid>` | Watching or editing a dance | `[{…dance}]`, or `{"danceFound": false}` |
-| `POST` or `PUT /api/index.php/dances/dance/[<guid>]` | Saving a dance | The dance's guid, as a JSON string |
+| `GET /api/users/<uuid>?uuid=<uuid>` | Every page load | `{"uuid": …, "dances": [{"guid", "robot_id", "robot_name"}]}` |
+| `PUT /api/users/<uuid>` | A browser's first visit | Same as above |
+| `GET /api/dances/<guid>` | Watching or editing a dance | `[{…dance}]`, or `{"danceFound": false}` |
+| `POST /api/dances` | Saving a new dance | The new dance's guid, as a JSON string |
+| `PUT /api/dances/<guid>` | Saving changes to a dance | The dance's guid, as a JSON string |
 
 There are no accounts. Each browser makes up a random UUID and keeps it in `localStorage`, and a dance belongs to the UUID that saved it. Only that UUID, sent in the request body, can update the dance.
 

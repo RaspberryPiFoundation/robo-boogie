@@ -33,9 +33,9 @@ module RoboBoogie
 
     module_function
 
-    # A dance as returned by GET /api/index.php/dances/dance/:guid (wrapped in an
-    # array by the caller). The owner's UUID is only revealed to the owner: the
-    # frontend compares it with its own UUID to decide whether to offer editing.
+    # A dance as returned by GET /api/dances/:guid (wrapped in an array by the
+    # caller). The owner's UUID is only revealed to the owner: the frontend
+    # compares it with its own UUID to decide whether to offer editing.
     def dance_response(dance, viewer_uuid: nil)
       soundtrack = SOUNDTRACK_FILES.fetch(dance[:sound_id], DEFAULT_SOUNDTRACK)
 

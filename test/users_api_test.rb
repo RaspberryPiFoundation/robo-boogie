@@ -3,7 +3,7 @@
 require "test_helper"
 
 class UsersApiTest < ApiTestCase
-  USER_URL = "/api/index.php/users/user"
+  USER_URL = "/api/users"
 
   def test_page_load_echoes_the_uuid_and_sets_the_owner_cookie
     visit_as OWNER

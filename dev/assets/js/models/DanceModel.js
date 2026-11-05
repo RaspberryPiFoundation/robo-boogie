@@ -19,11 +19,11 @@ define(["backbone",
 
             if (this.isNew()){
 
-                return urlConfig.get('url') + "/api/index.php/dances/dance/";
+                return urlConfig.get('url') + "/api/dances";
 
             } else {
 
-                return urlConfig.get('url') + "/api/index.php/dances/dance/" + this.id;
+                return urlConfig.get('url') + "/api/dances/" + this.id;
 
             }
         },
